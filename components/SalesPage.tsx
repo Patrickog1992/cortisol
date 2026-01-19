@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { UserData } from '../types';
 import { Button } from './ui/Button';
-import { Check, Star, Lock, ShieldCheck, ChevronDown, ChevronUp, Clock, Gift, AlertCircle } from 'lucide-react';
+import { Check, Star, Lock, ShieldCheck, ChevronDown, ChevronUp, Clock, AlertCircle, ShoppingBag } from 'lucide-react';
 
 interface SalesPageProps {
   userData: UserData;
 }
 
 const SalesPage: React.FC<SalesPageProps> = ({ userData }) => {
-  const [timeLeft, setTimeLeft] = useState({ minutes: 14, seconds: 59 });
+  // Timer Countdown - Starts at 10 minutes
+  const [timeLeft, setTimeLeft] = useState({ minutes: 10, seconds: 0 });
   const [mockupIndex, setMockupIndex] = useState(0);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
+  
+  // Popup State
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupData, setPopupData] = useState({ name: "Ana Paula", location: "São Paulo, SP" });
 
-  // Timer Countdown
+  // Timer Logic
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft(prev => {
@@ -24,6 +29,39 @@ const SalesPage: React.FC<SalesPageProps> = ({ userData }) => {
       });
     }, 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  // Popup Logic
+  const recentBuyers = [
+    { name: "Fernanda S.", location: "Rio de Janeiro" },
+    { name: "Mariana L.", location: "Belo Horizonte" },
+    { name: "Patrícia G.", location: "Curitiba" },
+    { name: "Camila R.", location: "São Paulo" },
+    { name: "Juliana M.", location: "Salvador" },
+    { name: "Beatriz C.", location: "Brasília" },
+    { name: "Roberta T.", location: "Porto Alegre" },
+    { name: "Luciana A.", location: "Recife" }
+  ];
+
+  useEffect(() => {
+    // Initial delay
+    const initialTimeout = setTimeout(() => {
+      setShowPopup(true);
+    }, 3000);
+
+    const interval = setInterval(() => {
+      setShowPopup(false);
+      setTimeout(() => {
+        const randomBuyer = recentBuyers[Math.floor(Math.random() * recentBuyers.length)];
+        setPopupData(randomBuyer);
+        setShowPopup(true);
+      }, 2000); // Wait 2s before showing next
+    }, 8000); // Cycle every 8 seconds
+
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+    };
   }, []);
 
   // Mockup Carousel
@@ -112,11 +150,32 @@ const SalesPage: React.FC<SalesPageProps> = ({ userData }) => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white shadow-2xl overflow-hidden pb-12">
+    <div className="max-w-md mx-auto bg-white shadow-2xl overflow-hidden pb-12 relative">
       {/* Sticky Header with Timer */}
-      <div className="sticky top-0 z-50 bg-[#FF6B6B] text-white p-2 flex justify-center items-center gap-2 shadow-md">
-        <Clock className="w-4 h-4" />
-        <span className="font-bold">OFERTA EXPIRA EM: {String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}</span>
+      <div className="sticky top-0 z-50 bg-[#FF6B6B] text-white p-3 shadow-md text-center">
+        <div className="flex flex-col items-center justify-center leading-tight">
+          <span className="font-bold text-sm md:text-base">Você acabou de receber 70% de desconto que expira em:</span>
+          <div className="flex items-center gap-2 mt-1">
+            <Clock className="w-5 h-5 text-[#FFD700]" />
+            <span className="font-extrabold text-2xl text-[#FFD700] tracking-widest">
+              {String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Social Proof Popup */}
+      <div 
+        className={`fixed top-[85px] right-2 z-40 bg-white/95 backdrop-blur-sm p-2 rounded-lg shadow-xl border-l-4 border-green-500 transform transition-all duration-500 ease-in-out flex items-center gap-2 max-w-[200px] ${showPopup ? 'translate-x-0 opacity-100' : 'translate-x-[120%] opacity-0'}`}
+      >
+        <div className="bg-green-100 p-1.5 rounded-full">
+          <ShoppingBag className="w-3 h-3 text-green-600" />
+        </div>
+        <div className="text-[10px] leading-tight">
+          <p className="font-bold text-gray-800"><span className="text-green-600">{popupData.name}</span></p>
+          <p className="text-gray-500">recebeu o MÉTODO</p>
+          <p className="text-gray-400 mt-0.5">{popupData.location}</p>
+        </div>
       </div>
 
       <div className="p-6">
