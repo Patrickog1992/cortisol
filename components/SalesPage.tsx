@@ -91,8 +91,7 @@ const SalesPage: React.FC<SalesPageProps> = ({ userData }) => {
   };
 
   const handleCheckout = () => {
-    // Placeholder for checkout link
-    alert("Redirecionando para checkout seguro...");
+    window.location.href = "https://go.perfectpay.com.br/PPU38CQ692F";
   };
 
   // Personalized insights based on user data
