@@ -17,6 +17,11 @@ const SalesPage: React.FC<SalesPageProps> = ({ userData }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [popupData, setPopupData] = useState({ name: "Ana Paula", location: "São Paulo, SP" });
 
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Timer Logic
   useEffect(() => {
     const timer = setInterval(() => {
@@ -249,7 +254,7 @@ const SalesPage: React.FC<SalesPageProps> = ({ userData }) => {
           <img 
             src={mockups[mockupIndex]} 
             alt="App Interface" 
-            className="w-full h-full object-cover transition-opacity duration-500" 
+            className="w-full h-full object-contain transition-opacity duration-500" 
           />
         </div>
 

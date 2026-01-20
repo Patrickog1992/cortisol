@@ -205,6 +205,7 @@ const Quiz: React.FC<QuizProps> = ({ userData, setUserData, onComplete }) => {
     // 9. Focus Areas (Multi)
     {
       title: "Selecione suas áreas de foco",
+      subtitle: "Marque quantas opções quiser",
       render: () => (
         <div className="w-full flex flex-col items-center">
           {renderMultiSelect(
@@ -230,6 +231,7 @@ const Quiz: React.FC<QuizProps> = ({ userData, setUserData, onComplete }) => {
     // 11. Symptoms (Multi)
     {
       title: "Você notou algum desses sintomas da menopausa?",
+      subtitle: "Marque quantas opções quiser",
       render: () => (
         <div className="w-full flex flex-col items-center">
           {renderMultiSelect(
